@@ -29,9 +29,9 @@ CAVA v1.2.0 requires Python version 2.7.x (Python 3 is not supported).
 
 CAVA can be downloaded from www.icr.ac.uk/cava
 
-After unpacking the tar.gz file, it can be installed with the following command:
+After unpacking the tar.gz file, you then need to install some 3rd-party modules that CAVA uses. These can be installed with the following command:
 
-./install.sh
+pip install -r requirements.txt
 
 Once the installation script finished successfully, CAVA is ready for use.
 
