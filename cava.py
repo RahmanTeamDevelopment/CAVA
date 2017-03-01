@@ -14,16 +14,6 @@ import gzip
 from optparse import OptionParser
 import multiprocessing
 
-if sys.version_info[0] == 3:
-    print '\nCAVA does not run on Python 3.\n'
-    quit()
-
-# Imports of CAVA code
-# Checking if installation is complete
-if not os.path.isfile(os.path.dirname(os.path.realpath(__file__))+"/pysamdir/pysam/Pileup.py"):
-    print '\nCAVA installation not complete.'
-    print 'Please run install.sh in the cava directory.\n'
-    quit()
 import core
 from core import Options
 from core import Record
@@ -31,8 +21,6 @@ from data import Ensembl
 from data import dbSNP
 from data import Reference
 
-# Pysam import
-sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)) + '/pysamdir')
 import pysam
 
 

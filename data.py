@@ -4,14 +4,12 @@
 # Classes providing interfaces with annotation databases and the reference genome
 #######################################################################################################################
 
-import sys, os
 import core
 import csn
 import conseq
-
-sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)) + '/pysamdir')
+import os
 import pysam
-
+import sys
 
 #######################################################################################################################
 

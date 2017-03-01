@@ -12,21 +12,8 @@ import gzip
 import datetime
 from optparse import OptionParser
 from operator import itemgetter
-import urllib
-
-if sys.version_info[0] == 3:
-    print '\nCAVA does not run on Python 3.\n'
-    quit()
-
-# Checking if installation is complete
-if not os.path.isfile(os.path.dirname(os.path.realpath(__file__))+"/pysamdir/pysam/Pileup.py"):
-    print '\nCAVA installation not complete.'
-    print 'Please run install.sh in the cava directory.\n'
-    quit()
-
-# Pysam import
-sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)) + '/pysamdir')
 import pysam
+import urllib
 
 
 #######################################################################################################################
