@@ -1,22 +1,12 @@
-#!/usr/bin/env python
-
-
-# Collection of basic classes and functions
-#######################################################################################################################
-
-
 from __future__ import division
+
 import os
 import logging
 import gzip
 import time
 
 
-#######################################################################################################################
-
-# Class representing a single variant call
 class Variant(object):
-    # Constructor
     def __init__(self, chrom, pos, ref, alt):
         self.chrom = chrom
         self.pos = pos
@@ -30,35 +20,27 @@ class Variant(object):
         self.flags = []
         self.flagvalues = []
 
-    # Getting basic information about variant
     def info(self):
         return self.getFullPosition() + '_' + self.ref + '>' + self.alt
 
-    # Getting chromosome name and position combined
     def getFullPosition(self):
         return self.chrom + ':' + str(self.pos)
 
-    # Checking if the variant is a base substitution
     def isSubstitution(self):
         return len(self.ref) == 1 and len(self.alt) == 1
 
-    # Checking if the variant is an insertion
     def isInsertion(self):
         return len(self.ref) == 0 and len(self.alt) > 0
 
-    # Checking if the variant is a deletion
     def isDeletion(self):
         return len(self.ref) > 0 and len(self.alt) == 0
 
-    # Checking if the variant is a complex indel
     def isComplex(self):
         return len(self.ref) > 0 and len(self.alt) > 0 and not self.isSubstitution()
 
-    # Checking if the variant is in-frame
     def isInFrame(self):
         return (len(self.alt) - len(self.ref)) % 3 == 0
 
-    # Checking if the variant overlaps with a genomic region
     def overlap(self, start, end):
         if self.isInsertion(): return (self.pos - 1 >= start) and (self.pos <= end)
         int1_start = self.pos

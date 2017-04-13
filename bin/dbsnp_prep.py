@@ -1,21 +1,15 @@
-#!/usr/bin/env python
+#!env/bin/python
 
 
-# dbSNP Database preparation tool (dbsnp_prep)
-#######################################################################################################################
-
-import os
-import sys
-import gzip
 import datetime
-from optparse import OptionParser
+import gzip
+import os
 import pysam
+import sys
+
+from optparse import OptionParser
 
 
-#######################################################################################################################
-
-
-# Process data file
 def processData(options, datafile, IDs):
     outfile = open(options.output, 'w')
 
@@ -66,7 +60,7 @@ def processData(options, datafile, IDs):
     outfile.close()
     return counter
 
-# Use Tabix to index output file     
+
 def indexFile(options):
     sys.stdout.write('Compressing output file ... ')
     sys.stdout.flush()
@@ -77,13 +71,13 @@ def indexFile(options):
     pysam.tabix_index(options.output + '.gz', seq_col=1, start_col=2, end_col=2, meta_char='#', force=True)
     sys.stdout.write('OK\n')
 
-# Read records from file as a list
+
 def readIDs(inputfn):
     ret = set()
     for line in open(inputfn): ret.add(line.strip())
     return list(ret)
 
-# Print out meta data
+
 def printMetaData(datafile):
     ret = None
     for line in datafile:
@@ -95,9 +89,6 @@ def printMetaData(datafile):
             if line.startswith('##reference='): print 'Reference: '+line[12:]+'\n'
         else:
             return ret
-
-
-#######################################################################################################################
 
 
 if __name__ == '__main__':
@@ -171,5 +162,3 @@ if __name__ == '__main__':
     print ''
     print 'CAVA dbsnp_prep successfully finished: ', datetime.datetime.now()
     print "---------------------------------------------------------------------------------------\n"
-
-#######################################################################################################################

@@ -1,21 +1,9 @@
-#!/usr/bin/env python
-
-
-# Classes providing interfaces with annotation databases and the reference genome
-#######################################################################################################################
-
-import core
-import csn
-import conseq
-import os
 import pysam
-import sys
 
-#######################################################################################################################
+from cava import conseq, core, csn
 
-# Class representing the Ensembl (transcript) dataset
+
 class Ensembl(object):
-    # Constructor
     def __init__(self, options, genelist, transcriptlist):
         self.options = options
         # Openning tabix file representing the Ensembl database
@@ -485,17 +473,11 @@ class Ensembl(object):
 
         return variant
 
-#######################################################################################################################
 
-
-# Class representing the dbSNP dataset
 class dbSNP(object):
-    # Constructor
     def __init__(self, options):
-        # Openning tabix file representing the dbSNP database
         self.tabixfile = pysam.Tabixfile(options.args['dbsnp'])
 
-    # Annotating a variant based on dbSNP data  
     def annotate(self, variant):
         # Checking if variant is a SNP at all
         if variant.isSubstitution():
@@ -520,9 +502,6 @@ class dbSNP(object):
         return variant
 
 
-#######################################################################################################################
-
-# Class representing the reference genome dataset
 class Reference(object):
     # Constructor
     def __init__(self, options):
@@ -554,5 +533,3 @@ class Reference(object):
         if end > last: end = last
         seq = self.fastafile.fetch(goodchrom, start - 1, end)
         return core.Sequence(seq.upper())
-
-#######################################################################################################################

@@ -1,15 +1,7 @@
-#!/usr/bin/env python
+from cava import core
 
 
-# CSN annotation
-#######################################################################################################################
-
-import core
-
-
-# Class representing a CSN annotation
 class CSNAnnot():
-    # Constructor
     def __init__(self, coord1, intr1, coord2, intr2, dna, protein, coord1_ins, intr1_ins, coord2_ins, intr2_ins, dna_ins):
         self.coord1 = coord1
         self.intr1 = intr1
@@ -23,7 +15,6 @@ class CSNAnnot():
         self.intr2_ins = intr2_ins
         self.dna_ins = dna_ins
 
-    # Getting annotation as a single String
     def getAsString(self):
         # Adding the first part of the csn annotation (coordinates)
         ret = 'c.' + str(self.coord1)
@@ -43,7 +34,6 @@ class CSNAnnot():
         ret += self.dna + self.protein
         return ret
 
-    # Getting annotation as a list of separate values
     def getAsFields(self):
         if not self.coord1_ins == '':
             return self.coord1_ins, self.intr1_ins, self.coord2_ins, self.intr2_ins, self.dna_ins, self.protein
@@ -51,9 +41,6 @@ class CSNAnnot():
             return self.coord1, self.intr1, self.coord2, self.intr2, self.dna, self.protein
 
 
-#######################################################################################################################
-
-# Getting CSN annotation of a given variant
 def getAnnotation(variant, transcript, reference, prot, mutprot):
 
     # Creating csn annotation coordinates
@@ -374,9 +361,6 @@ def transformToCSNCoordinate(pos, transcript):
         return str(sumpos), 0
 
 
-
-
-# Calculating csn coordinates for duplications
 def duplicationCoordinates(variant, transcript):
     if transcript.strand == 1:
         coord1, intr1 = transformToCSNCoordinate(variant.pos - len(variant.alt), transcript)
@@ -405,5 +389,3 @@ def changeTo3letters(aas):
         '*': 'X', 'X': 'X', 'x': 'X'}
     for aa in aas: ret += codes[aa]
     return ret
-
-#######################################################################################################################

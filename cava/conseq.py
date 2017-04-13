@@ -1,10 +1,5 @@
-#!/usr/bin/env python
 
 
-# CLASS annotation
-#######################################################################################################################
-
-# Getting CLASS annotation of a given variant
 def getClassAnnotation(variant, transcript, protein, mutprotein, loc, ssrange):
     # Variants in UTR
     chkutr = checkUTR(transcript, variant)
@@ -73,13 +68,6 @@ def getClassAnnotation(variant, transcript, protein, mutprotein, loc, ssrange):
     # In-frame variants
     if potSS: return 'EE'
     return 'IF'
-
-#######################################################################################################################
-
-
-
-# Sequence Ontology (SO)
-#######################################################################################################################
 
 
 def getSequenceOntologyAnnotation(variant, transcript, protein, mutprotein, loc):
@@ -208,7 +196,6 @@ def isInSplicingRegion(transcript, variant):
             if not isFirstExon and variant.overlap(exon.end - 2, exon.end + 8): return True
         return False
 
-#######################################################################################################################
 
 def checkUTR(transcript, variant):
     if variant.isInsertion():
