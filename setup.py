@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='Cava',
-    version='1.2',
+    name='CAVA',
+    version='1.3.0',
     description='Annotation of genetic variants',
     url='https://github.com/RahmanTeamDevelopment/CAVA',
     author='Marton Munz',
@@ -11,6 +11,7 @@ setup(
     packages=['cava'],
     scripts=[
         'bin/CAVA.py',
+        'bin/cava',
         'bin/dbsnp_prep.py',
         'bin/ensembl_prep.py'
     ],
