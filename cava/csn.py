@@ -1,4 +1,4 @@
-from cava import core
+import core
 
 
 class CSNAnnot():

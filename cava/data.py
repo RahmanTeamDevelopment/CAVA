@@ -1,6 +1,8 @@
 import pysam
 
-from cava import conseq, core, csn
+import conseq
+import core
+import csn
 
 
 class Ensembl(object):

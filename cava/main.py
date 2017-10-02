@@ -1,5 +1,3 @@
-#!/env/bin/python
-
 
 from __future__ import division
 
@@ -9,16 +7,16 @@ import logging
 import multiprocessing
 import os
 import sys
-from optparse import OptionParser
 
 import pysam
 
-from cava import core
-from cava.core import Options
-from cava.core import Record
-from cava.data import Ensembl
-from cava.data import Reference
-from cava.data import dbSNP
+
+import core
+from core import Options
+from core import Record
+from data import Ensembl
+from data import Reference
+from data import dbSNP
 
 
 def printStartInfo(ver):
@@ -154,13 +152,6 @@ def mergeTmpFiles(output, format, threads):
     for fn in filenames: os.remove(fn)
 
 
-def defaultConfigPath():
-    for line in open(os.path.dirname(os.path.realpath(__file__)) + '/default_config_path'):
-        line = line.strip()
-        if line != '': return line
-    return None
-
-
 class SingleJob(multiprocessing.Process):
     def __init__(self, threadidx, options, copts, startline, endline, genelist, transcriptlist, snplist, impactdir,
                  numOfRecords):
@@ -238,7 +229,7 @@ class SingleJob(multiprocessing.Process):
 
     # Running process
     def run(self):
-        if options.args['logfile']:
+        if self.options.args['logfile']:
             logging.info('Process ' + str(self.threadidx) + ' - variant annotation started.')
 
         # Iterating through input file
@@ -256,7 +247,7 @@ class SingleJob(multiprocessing.Process):
             if line == '': continue
 
             # Printing out progress information
-            if not copts.stdout and self.threadidx == 1:
+            if not self.copts.stdout and self.threadidx == 1:
                 if counter % 1000 == 0: printProgressInfo(counter, int(self.numOfRecords / self.copts.threads))
 
             # Parsing record from input file
@@ -289,48 +280,21 @@ class SingleJob(multiprocessing.Process):
         self.outfile.close()
 
         # Finalizing progreaa info
-        if not copts.stdout and self.threadidx == 1: finalizeProgressInfo()
+        if not self.copts.stdout and self.threadidx == 1: finalizeProgressInfo()
 
 
-if __name__ == "__main__":
-    ver = 'v1.2.0'
+def main(ver, copts):
+    """Main function"""
 
-    # Read default configuration file name from the default_config_path file
-    default_config_file = defaultConfigPath()
-
-    # Command line argument parsing
-    descr = 'CAVA (Clinical Annotation of VAriants) ' + ver + ' is a lightweight, fast and flexible NGS variant annotation tool that provides consistent transcript-level annotation.'
-    epilog = '\nExample usage: path/to/cava/cava.py -c config.txt -i input.vcf -o output\n\n'
-    OptionParser.format_epilog = lambda self, formatter: self.epilog
-
-    parser = OptionParser(usage='python path/to/cava/cava.py <options>', version=ver, description=descr, epilog=epilog)
-    parser.add_option('-i', "--in", default='input.vcf', dest='input', action='store',
-                      help="Input file name [default value: %default]")
-    parser.add_option('-o', "--out", default='output', dest='output', action='store',
-                      help="Output file name prefix [default value: %default]")
-    parser.add_option('-c', "--config", default=default_config_file, dest='conf', action='store',
-                      help="Configuration file name [default value: %default]")
-    parser.add_option('-s', "--stdout", default=False, dest='stdout', action='store_true',
-                      help="Write output to standard output [default value: %default]")
-    parser.add_option('-t', "--threads", default=1, dest='threads', action='store',
-                      help="Number of threads [default value: %default]")
-    (copts, args) = parser.parse_args()
     copts.threads = int(copts.threads)
     if copts.threads > 1: copts.stdout = False
 
-    # Use default path read from the default_config_path file, if -c is not used
-    if copts.conf == None: copts.conf = default_config_file
-
     # Check if input and configuration files exist
-    if copts.conf == None:
-        print '\nError: no configuration file specified.'
-        print 'Please use option -c or add the absolute path to the default_config_path file.\n'
-        quit()
     if not os.path.isfile(copts.conf):
-        print '\nError: configuration file ('+copts.conf+') cannot be found.\n'
+        print '\nError: configuration file (' + copts.conf + ') cannot be found.\n'
         quit()
     if not os.path.isfile(copts.input):
-        print '\nError: input file ('+copts.input+') cannot be found.\n'
+        print '\nError: input file (' + copts.input + ') cannot be found.\n'
         quit()
 
     # Reading options from configuration file
@@ -338,7 +302,8 @@ if __name__ == "__main__":
 
     # Initializing log file
     if options.args['logfile']:
-        logging.basicConfig(filename=copts.output + '.log', filemode='w', format='%(asctime)s %(levelname)s: %(message)s',
+        logging.basicConfig(filename=copts.output + '.log', filemode='w',
+                            format='%(asctime)s %(levelname)s: %(message)s',
                             level=logging.DEBUG)
 
     # Printing out version information and start time
@@ -405,3 +370,8 @@ if __name__ == "__main__":
 
     if not copts.stdout:
         printEndInfo(options, copts, starttime)
+
+
+
+
+

@@ -10,7 +10,7 @@ setup(
     license='MIT',
     packages=['cava'],
     scripts=[
-        'bin/cava.py',
+        'bin/CAVA.py',
         'bin/dbsnp_prep.py',
         'bin/ensembl_prep.py'
     ],
